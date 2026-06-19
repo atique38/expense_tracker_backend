@@ -120,6 +120,23 @@ Responses use a consistent format:
 }
 ```
 
+## Postman Collection
+
+A ready-to-import Postman collection is included here:
+
+- [postman/expense-tracker-api.postman_collection.json](postman/expense-tracker-api.postman_collection.json)
+
+Collection variables:
+
+- `baseUrl` defaults to `http://127.0.0.1:8000`
+- `userId`
+- `accountId`
+- `categoryId`
+- `transactionId`
+- `budgetId`
+
+Import the collection into Postman, then update `baseUrl` if your Laravel app is running on a different host or port.
+
 ## Authentication
 
 This project does not use passwords or token-based authentication yet.
@@ -268,4 +285,3 @@ Run `php artisan db:seed` after migrating if you want that record available loca
 - Axios is preconfigured to send JSON requests to the API base URL
 - The dashboard shell is ready for a Vue or other frontend layer to mount onto
 - Route model binding is scoped under `/api/users/{user}` so user-owned data stays isolated per user
-
