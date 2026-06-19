@@ -23,7 +23,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('reference', 100)->nullable();
             $table->timestamps();
-            $table->softDeletes();
 
             $table->index(['user_id', 'transaction_type', 'transaction_date']);
             $table->index(['account_id', 'transaction_date']);

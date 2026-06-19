@@ -70,9 +70,9 @@ class ExpenseTrackerRoutesTest extends TestCase
         $response = $this->getJson("/api/users/{$user->id}/dashboard");
 
         $response->assertOk()
-            ->assertJsonPath('data.totals.income', 500)
-            ->assertJsonPath('data.totals.expense', 200)
-            ->assertJsonPath('data.totals.balance', 1300)
+            ->assertJsonPath('data.summary.income', 500)
+            ->assertJsonPath('data.summary.expense', 200)
+            ->assertJsonPath('data.summary.balance', 1300)
             ->assertJsonPath('data.counts.accounts', 1)
             ->assertJsonPath('data.counts.categories', 2)
             ->assertJsonPath('data.counts.transactions', 2)
@@ -80,7 +80,7 @@ class ExpenseTrackerRoutesTest extends TestCase
                 'status',
                 'message',
                 'data' => [
-                    'totals' => ['income', 'expense', 'balance'],
+                    'summary' => ['income', 'expense', 'balance', 'net_change', 'savings_rate'],
                     'counts' => ['accounts', 'categories', 'budgets', 'transactions'],
                     'recent_transactions' => [
                         '*' => ['id', 'account', 'category', 'transaction_type', 'amount', 'transaction_date'],

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->boolean('is_default')->default(false);
             $table->text('notes')->nullable();
             $table->timestamps();
-            $table->softDeletes();
 
             $table->index(['user_id', 'type']);
         });

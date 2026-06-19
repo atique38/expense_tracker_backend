@@ -1,59 +1,271 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Expense Tracker Backend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Laravel 12 backend and dashboard shell for a personal expense tracker.
 
-## About Laravel
+This project provides:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Phone-based user login
+- User-scoped CRUD APIs for accounts, categories, transactions, and budgets
+- A dashboard summary endpoint with totals, balances, recent activity, and budget progress
+- A Blade dashboard shell at the main web routes
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Login or create a user with a phone number
+- Create, update, list, and delete expense data by user
+- Fetch dashboard metrics for a single user
+- Hard deletes only, no soft delete behavior
+- JSON API responses with a consistent `status`, `message`, `data` structure
+- Vite-powered frontend shell using Axios and Tailwind CSS
 
-## Learning Laravel
+## Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP 8.2+
+- Laravel 12
+- SQLite, MySQL, or PostgreSQL
+- Vite
+- Tailwind CSS
+- Axios
+- PHPUnit 11
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Requirements
 
-## Laravel Sponsors
+- PHP 8.2 or newer
+- Composer
+- Node.js 18 or newer
+- A database engine supported by Laravel
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Installation
 
-### Premium Partners
+Clone the repository and install dependencies:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+composer install
+npm install
+```
 
-## Contributing
+Create your environment file and generate the application key:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Code of Conduct
+Update your database settings in `.env`, then run the migrations:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan migrate
+```
 
-## Security Vulnerabilities
+Seed the sample user if you want test data:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan db:seed
+```
 
-## License
+If you want the frontend shell assets available during development, run:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+npm run dev
+```
+
+Start the Laravel server:
+
+```bash
+php artisan serve
+```
+
+## Environment
+
+Set the database credentials that match your local setup. A typical MySQL configuration looks like this:
+
+```env
+APP_NAME="Expense Tracker"
+APP_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=expense_tracker
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+If you prefer SQLite, create an empty database file and point `DB_DATABASE` to it.
+
+## Web Routes
+
+The following web routes all render the dashboard shell:
+
+- `GET /`
+- `GET /dashboard`
+- `GET /accounts`
+- `GET /categories`
+- `GET /transactions`
+- `GET /budgets`
+
+The shell exposes helper route constants in `resources/js/app.js` and uses Axios with the API base URL.
+
+## API Base
+
+All API routes live under `/api`.
+
+Responses use a consistent format:
+
+```json
+{
+  "status": 200,
+  "message": "Request completed successfully.",
+  "data": {}
+}
+```
+
+## Authentication
+
+This project does not use passwords or token-based authentication yet.
+
+Login is phone-based:
+
+- If the phone number exists, the matching user is returned
+- If the phone number does not exist, a new user is created
+
+### Login
+
+`POST /api/login`
+
+Request body:
+
+```json
+{
+  "phone": "01700000000",
+  "name": "Test User"
+}
+```
+
+Validation:
+
+- `phone` is required and must be exactly 11 characters
+- `name` is optional
+
+## Dashboard
+
+`GET /api/users/{user}/dashboard`
+
+Returns:
+
+- `summary` with income, expense, balance, net change, and savings rate
+- `counts` for accounts, categories, budgets, and transactions
+- `weekly_flow`
+- `accounts`
+- `recent_transactions`
+- `budgets`
+
+Example:
+
+```bash
+GET /api/users/1/dashboard
+```
+
+## Resources
+
+All CRUD resources are scoped by user:
+
+- `GET /api/users/{user}/categories`
+- `GET /api/users/{user}/accounts`
+- `GET /api/users/{user}/transactions`
+- `GET /api/users/{user}/budgets`
+
+Each resource supports the standard Laravel resource actions:
+
+- `GET /` for listing
+- `POST /` for creating
+- `GET /{id}` for showing one item
+- `PUT` or `PATCH /{id}` for updating
+- `DELETE /{id}` for deleting
+
+### Categories
+
+Fields:
+
+- `name` required
+- `type` required, one of `income` or `expense`
+
+### Accounts
+
+Fields:
+
+- `name` required
+- `type` required, one of `cash`, `bank`, `card`, `bkash`, `nagad`, `rocket`, or `other`
+- `currency` optional, defaults to `BDT`
+- `opening_balance` optional, defaults to `0`
+- `is_default` optional
+- `notes` optional
+
+### Transactions
+
+Fields:
+
+- `account_id` required
+- `category_id` optional
+- `transaction_type` required, one of `income` or `expense`
+- `amount` required
+- `transaction_date` required
+- `title` required
+- `description` optional
+- `reference` optional
+
+### Budgets
+
+Fields:
+
+- `category_id` optional
+- `amount` required
+- `period` required, one of `weekly`, `monthly`, `yearly`, or `custom`
+- `start_date` optional
+- `end_date` optional
+
+## Data Model
+
+Core tables:
+
+- `users`
+- `categories`
+- `accounts`
+- `transactions`
+- `budgets`
+
+Important relationships:
+
+- A user has many categories, accounts, transactions, and budgets
+- An account can have many transactions
+- A category can have many transactions and budgets
+- A budget belongs to a category
+
+Deletes are permanent. Soft delete columns and soft delete model traits are not used in the current version of the app.
+
+## Testing
+
+Run the test suite with:
+
+```bash
+php artisan test
+```
+
+The test database is configured to use in-memory SQLite.
+
+## Sample Data
+
+The database seeder creates one test user:
+
+- `name`: `Test User`
+- `phone`: `01700000000`
+
+Run `php artisan db:seed` after migrating if you want that record available locally.
+
+## Development Notes
+
+- Frontend assets are built with Vite
+- Axios is preconfigured to send JSON requests to the API base URL
+- The dashboard shell is ready for a Vue or other frontend layer to mount onto
+- Route model binding is scoped under `/api/users/{user}` so user-owned data stays isolated per user
+
