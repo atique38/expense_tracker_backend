@@ -22,7 +22,7 @@ This project provides:
 
 - PHP 8.2+
 - Laravel 12
-- SQLite, MySQL, or PostgreSQL
+- MySQL
 - Vite
 - Tailwind CSS
 - Axios
