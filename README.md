@@ -33,7 +33,17 @@ This project provides:
 - PHP 8.2 or newer
 - Composer
 - Node.js 18 or newer
-- A database engine supported by Laravel
+- MySQL database server
+- XAMPP if you want to run the backend locally on Windows
+
+## Local Setup with XAMPP
+
+If you are running this backend locally with XAMPP:
+
+- Open the XAMPP Control Panel
+- Start the `Apache` and `MySQL` services
+- Make sure your local MySQL database is created before running migrations
+- Keep the XAMPP services running whenever you access the API or the dashboard locally
 
 ## Installation
 
@@ -51,7 +61,7 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-Update your database settings in `.env`, then run the migrations:
+Update your database settings in `.env` so they match your XAMPP MySQL configuration, then run the migrations:
 
 ```bash
 php artisan migrate
